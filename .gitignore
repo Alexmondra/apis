@@ -1,0 +1,14 @@
+# Binarios de Go
+main
+api-reniec
+*.exe
+*.bin
+.env
+ 
+db_data/
+mysql/
+
+# Dependencias y temporales
+vendor/
+/tmp
+/out
