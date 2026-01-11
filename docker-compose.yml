@@ -1,0 +1,22 @@
+version: '3.8'
+services:
+  db:
+    image: mariadb:latest
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: reniec
+    volumes:
+      - db_data:/var/lib/mysql
+
+  api:
+    build: .
+    ports:
+      - "9090:9090"
+    depends_on:
+      - db
+    environment:
+      DB_DSN: "root:root@tcp(db:3306)/reniec?charset=utf8mb4&parseTime=True&loc=Local"
+
+volumes:
+  db_data:
