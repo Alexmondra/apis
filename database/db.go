@@ -4,7 +4,7 @@ import (
 	"api-reniec/models"
 	"log"
 	"os"
-	"time" 
+	"time"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 )
@@ -12,13 +12,12 @@ import (
 var DB *gorm.DB
 
 func Connect() {
-	dsn := os.Getenv("DB_DSN") 
+	dsn := os.Getenv("DB_DSN")
 	if dsn == "" {
-		dsn = "root:root@tcp(127.0.0.1:3306)/reniec?charset=utf8mb4&parseTime=True&loc=Local"
+		log.Fatal("❌ ERROR: La variable DB_DSN no está definida. Asegúrate de que el archivo .env exista y esté bien configurado.")
 	}
 
 	var err error
-	// Intentar conectar hasta 10 veces (esperando 2 segundos entre cada una)
 	for i := 0; i < 10; i++ {
 		DB, err = gorm.Open(mysql.Open(dsn), &gorm.Config{})
 		if err == nil {
@@ -30,9 +29,8 @@ func Connect() {
 	}
 
 	if err != nil {
-		log.Fatal("❌ No se pudo conectar a la DB después de varios intentos:", err)
+		log.Fatal("❌ No se pudo conectar a la DB:", err)
 	}
 
-	// Migraciones automáticas
-	DB.AutoMigrate(&models.Persona{}, &models.ContactoPersona{}, &models.Empresa{}, &models.ContactoEmpresa{},&models.Client{})
+	DB.AutoMigrate(&models.Persona{}, &models.ContactoPersona{}, &models.Empresa{}, &models.ContactoEmpresa{}, &models.Client{})
 }
